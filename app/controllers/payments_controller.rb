@@ -19,6 +19,7 @@ class PaymentsController < ApplicationController
   end
 
   def show
+    render json: Payment.find(params[:id])
   end
 
   private

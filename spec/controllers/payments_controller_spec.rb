@@ -48,5 +48,18 @@ RSpec.describe PaymentsController, type: :controller do
   end
 
   describe '#show' do
+    it 'responds with a 200' do
+      loan = Loan.create!(funded_amount: 1000)
+      payment = loan.payments.create!(amount: 500)
+      get :show, loan_id: loan.id, id: payment.id
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'provides payment details' do
+      loan = Loan.create!(funded_amount: 1000)
+      payment = loan.payments.create!(amount: 500)
+      get :show, loan_id: loan.id, id: payment.id
+      expect(JSON.parse(response.body)['amount']).to eq('500.0')
+    end
   end
 end
