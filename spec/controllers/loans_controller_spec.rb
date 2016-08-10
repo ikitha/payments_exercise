@@ -6,6 +6,23 @@ RSpec.describe LoansController, type: :controller do
       get :index
       expect(response).to have_http_status(:ok)
     end
+
+    it 'returns all of the loans' do
+      Loan.create!(funded_amount: 1000.0)
+      Loan.create!(funded_amount: 5000.0)
+      Loan.create!(funded_amount: 10000.0)
+      Loan.create!(funded_amount: 2000.0)
+      Loan.create!(funded_amount: 4000.0)
+      get :index
+      expect(JSON.parse(response.body).size).to eq(5)
+    end
+
+    # it 'returns all loans including balance' do
+    #   Loan.create!(funded_amount: 1000.0)
+    #   Loan.create!(funded_amount: 5000.0)
+    #   get :index
+    #   #assertion
+    # end
   end
 
   describe '#show' do
@@ -22,5 +39,10 @@ RSpec.describe LoansController, type: :controller do
         expect(response).to have_http_status(:not_found)
       end
     end
+
+    # it 'returns the balance due' do
+    #   get :show, id: loan.id
+    #   #assertion
+    # end
   end
 end
