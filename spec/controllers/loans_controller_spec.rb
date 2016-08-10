@@ -17,12 +17,13 @@ RSpec.describe LoansController, type: :controller do
       expect(JSON.parse(response.body).size).to eq(5)
     end
 
-    # it 'returns all loans including balance' do
-    #   Loan.create!(funded_amount: 1000.0)
-    #   Loan.create!(funded_amount: 5000.0)
-    #   get :index
-    #   #assertion
-    # end
+    it 'returns all loans including balance' do
+      Loan.create!(funded_amount: 1000.0)
+      Loan.create!(funded_amount: 5000.0)
+      get :index
+      expect(JSON.parse(response.body)[0]['balance_due']).to eq('1000.0')
+      expect(JSON.parse(response.body)[1]['balance_due']).to eq('5000.0')
+    end
   end
 
   describe '#show' do
@@ -40,9 +41,9 @@ RSpec.describe LoansController, type: :controller do
       end
     end
 
-    # it 'returns the balance due' do
-    #   get :show, id: loan.id
-    #   #assertion
-    # end
+    it 'returns the balance due' do
+      get :show, id: loan.id
+      expect(JSON.parse(response.body)['balance_due']).to eq('100.0')
+    end
   end
 end
