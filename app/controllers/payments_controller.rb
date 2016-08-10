@@ -9,8 +9,21 @@ class PaymentsController < ApplicationController
   end
 
   def create
+    loan = Loan.find(params[:loan_id])
+    payment = loan.payments.build(payment_params)
+    if payment.save
+      render json: payment
+    else
+      render json: payment.errors, status: :bad_request
+    end
   end
 
   def show
+  end
+
+  private
+
+  def payment_params
+    params.require(:payment).permit(:amount, :payment_date)
   end
 end
